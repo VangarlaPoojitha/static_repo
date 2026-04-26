@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate HTML
+        run: |
+          sudo apt-get install -y tidy
+          tidy -errors -quiet -utf8 index.html || true
+
+      - name: Check files exist
+        run: |
+          test -f index.html && echo "index.html OK"
+          test -f style.css  && echo "style.css OK"
+          test -f script.js  && echo "script.js OK"
